@@ -2,7 +2,7 @@ export default function Register() {
     return (
         <div>
             <h1>Register</h1>
-            <form action={'/register'} method={'post'}>
+            <form action={'/api/register'} method={'post'}>
                 <div>
                     <label htmlFor={'name'}>Name</label>
                     <input type={'name'} name={'name'} id={'name'} />
