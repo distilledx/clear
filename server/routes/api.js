@@ -1,33 +1,31 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const SignUp = require('../models/signUp.js');
+const fs = require('fs');
 
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
-router.get('/names', (req, res) => {
-    res.json({ testing: 'testing' });
-});
-
 router.post('/register', async (req, res) => {
+    data = JSON.parse(fs.readFileSync('./server/data.json'));
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        const signedUp = new SignUp({
-            username: req.body.username,
+        const hashedUser = await bcrypt.hash(req.body.username, 10);
+
+        data[req.body.username] = {
             email: req.body.email,
             password: hashedPassword,
-        });
-        signedUp.save();
+            id: hashedUser,
+            files: [],
+        };
+
+        fs.writeFileSync('./server/data.json', JSON.stringify(data));
+
         res.redirect('/login');
-    } catch {
-        console.log(req.body);
+    } catch (err) {
+        console.log(err);
         res.redirect('/register');
     }
-});
-
-router.post('/fileupload', (req, res) => {
-    console.log(req);
 });
 
 module.exports = router;

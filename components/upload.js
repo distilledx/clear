@@ -18,7 +18,7 @@ export default function Upload() {
             <h1>Upload</h1>
             <input type={'file'} name={'file'} id={'file'} />
             <br></br>
-            <input type={'submit'} onClick={filer} />
+            <button onClick={filer}>Submit</button>
         </div>
     );
 }
