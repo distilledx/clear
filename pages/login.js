@@ -1,9 +1,9 @@
-import Welcome from '../components/welcome.js';
+import Login from '../components/login.js';
 
 export default function Home() {
     return (
         <div>
-            <Welcome />
+            <Login />
         </div>
     );
 }
