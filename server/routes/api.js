@@ -12,10 +12,10 @@ router.post('/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const hashedUser = await bcrypt.hash(req.body.username, 10);
 
-        data[req.body.username] = {
+        data[hashedUser] = {
             email: req.body.email,
             password: hashedPassword,
-            id: hashedUser,
+            username: req.body.username,
             files: [],
         };
 
@@ -25,6 +25,26 @@ router.post('/register', async (req, res) => {
     } catch (err) {
         console.log(err);
         res.redirect('/register');
+    }
+});
+
+router.post('/login', async (req, res) => {
+    data = JSON.parse(fs.readFileSync('./server/data.json'));
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const hashedUser = await bcrypt.hash(req.body.username, 10);
+
+        if (!(hashedUser in data) || data[req.body.password] == null) {
+            return res.send({ body: `${req.body.username} ${hashedUser}` });
+        }
+        if (await bcrypt.compare(hashedPassword, data[hashedUser].password)) {
+            res.redirect('/');
+        } else {
+            return res.send({ body: 'Wrong Password' });
+        }
+    } catch (err) {
+        console.log(err);
+        res.redirect('/login');
     }
 });
 
