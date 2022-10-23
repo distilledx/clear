@@ -14,7 +14,7 @@ router.post('/register', async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const signedUp = new SignUp({
-            username: req.body.name,
+            username: req.body.username,
             email: req.body.email,
             password: hashedPassword,
         });
@@ -26,6 +26,8 @@ router.post('/register', async (req, res) => {
     }
 });
 
-router.post('/login', async (req, res) => {});
+router.post('/fileupload', (req, res) => {
+    console.log(req);
+});
 
 module.exports = router;

@@ -5,7 +5,7 @@ export default function Register() {
             <form action={'/api/register'} method={'post'}>
                 <div>
                     <label htmlFor={'name'}>Name</label>
-                    <input type={'name'} name={'name'} id={'name'} />
+                    <input type={'name'} name={'username'} id={'name'} />
                 </div>
                 <div>
                     <label htmlFor={'email'}>Email</label>
