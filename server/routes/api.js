@@ -12,10 +12,10 @@ router.post('/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const hashedUser = await bcrypt.hash(req.body.username, 10);
 
-        data[hashedUser] = {
+        data[req.body.username] = {
             email: req.body.email,
             password: hashedPassword,
-            username: req.body.username,
+            usernameHash: hashedUser,
             files: [],
         };
 
@@ -29,16 +29,13 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    data = JSON.parse(fs.readFileSync('./server/data.json'));
+    let data = JSON.parse(fs.readFileSync('./server/data.json'));
     try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        const hashedUser = await bcrypt.hash(req.body.username, 10);
-
-        if (!(hashedUser in data) || data[req.body.password] == null) {
-            return res.send({ body: `${req.body.username} ${hashedUser}` });
+        if (!(req.body.username in data) || req.body.password == null) {
+            return res.send({ body: 'Could not find user' });
         }
-        if (await bcrypt.compare(hashedPassword, data[hashedUser].password)) {
-            res.redirect('/');
+        if (await bcrypt.compare(req.body.password, data[req.body.username].password)) {
+            return res.send({ body: 'Success! Reload the page' });
         } else {
             return res.send({ body: 'Wrong Password' });
         }

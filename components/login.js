@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 export default function Login() {
-    const [err, setErr] = useState('');
+    const [log, setLog] = useState(['none', '']);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -17,14 +17,22 @@ export default function Login() {
                 username,
                 password,
             }),
-        }).then(res => {
-            console.log(res.json());
-        });
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.body == 'Success! Reload the page') {
+                    document.cookie = 'loggedIn=true';
+                    window.location.href = '/';
+                } else {
+                    setLog(['block', data.body]);
+                }
+            });
     }
 
     return (
         <div>
             <h1>Login</h1>
+            <p style={{ display: log[0] }}>{log[1]}</p>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Username</label>
