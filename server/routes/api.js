@@ -8,16 +8,23 @@ router.use(express.urlencoded({ extended: true }));
 
 router.post('/register', async (req, res) => {
     data = JSON.parse(fs.readFileSync('./server/data.json'));
+    users = JSON.parse(fs.readFileSync('./server/users.json'));
     try {
+        let res = '';
+        for (let i = 0; i < 25; i++) {
+            res += String.fromCharCode(Math.floor(Math.random() * 26) + 97);
+        }
+
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        const hashedUser = await bcrypt.hash(req.body.username, 10);
 
         data[req.body.username] = {
             email: req.body.email,
             password: hashedPassword,
-            usernameHash: hashedUser,
+            session: res,
             files: [],
         };
+
+        users[res] = req.body.username;
 
         fs.writeFileSync('./server/data.json', JSON.stringify(data));
 
@@ -35,7 +42,7 @@ router.post('/login', async (req, res) => {
             return res.send({ body: 'Could not find user' });
         }
         if (await bcrypt.compare(req.body.password, data[req.body.username].password)) {
-            return res.send({ body: 'Success! Reload the page' });
+            return res.send({ body: 'Success!', session: data[req.body.username].session });
         } else {
             return res.send({ body: 'Wrong Password' });
         }

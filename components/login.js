@@ -20,9 +20,10 @@ export default function Login() {
         })
             .then(res => res.json())
             .then(data => {
-                if (data.body == 'Success! Reload the page') {
+                if (data.body == 'Success!') {
                     document.cookie = 'loggedIn=true';
                     window.location.href = '/';
+                    window.localStorage.setItem('session', data.session);
                 } else {
                     setLog(['block', data.body]);
                 }
