@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 function fetcher() {
     let contentId = document.getElementById('contentId').value;
     // let token = document.getElementById('token').value;
@@ -17,10 +19,11 @@ function fetcher() {
         mode: 'cors',
     })
         .then(res => res.json())
-        .then(data => console.log(data.data.childs[0]));
+        .then(data => setData([block, data.data.childs[0]]));
 }
 
 export default function Download() {
+    const [data, setData] = useState([None, '']);
     return (
         <div>
             <h1>Download</h1>
@@ -30,6 +33,10 @@ export default function Download() {
             {/*<p>token</p>
             <input id={'token'} />*/}
             <button onClick={fetcher}>Submit</button>
+            <br></br>
+            <a href={data[1]}>
+                <button style={{ display: data[0] }}>Download</button>
+            </a>
         </div>
     );
 }

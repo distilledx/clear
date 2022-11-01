@@ -10,9 +10,9 @@ router.post('/register', async (req, res) => {
     data = JSON.parse(fs.readFileSync('./server/data.json'));
     users = JSON.parse(fs.readFileSync('./server/users.json'));
     try {
-        let res = '';
+        let ses = '';
         for (let i = 0; i < 25; i++) {
-            res += String.fromCharCode(Math.floor(Math.random() * 26) + 97);
+            ses += String.fromCharCode(Math.floor(Math.random() * 26) + 97);
         }
 
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -20,13 +20,14 @@ router.post('/register', async (req, res) => {
         data[req.body.username] = {
             email: req.body.email,
             password: hashedPassword,
-            session: res,
+            session: ses,
             files: [],
         };
 
-        users[res] = req.body.username;
+        users[ses] = req.body.username;
 
         fs.writeFileSync('./server/data.json', JSON.stringify(data));
+        fs.writeFileSync('./server/users.json', JSON.stringify(users));
 
         res.redirect('/login');
     } catch (err) {
