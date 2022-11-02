@@ -53,4 +53,25 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.post('/upload', async (req, res) => {
+    let data = JSON.parse(fs.readFileSync('./server/data.json'));
+    let users = JSON.parse(fs.readFileSync('./server/users.json'));
+
+    let userId = req.body.session;
+    let fileId = req.body.id;
+
+    let user = 'Anon';
+
+    if (userId) {
+        if (userId in users) {
+            user = users[userId];
+            data[user].files.push(fileId);
+            fs.writeFileSync('./server/data.json', JSON.stringify(data));
+            return res.send({ body: 'Verified' });
+        }
+    }
+
+    return res.send({ body: 'Unverified' });
+});
+
 module.exports = router;
