@@ -58,7 +58,7 @@ router.post('/upload', async (req, res) => {
     let users = JSON.parse(fs.readFileSync('./server/users.json'));
 
     let userId = req.body.session;
-    let fileId = req.body.fileId;
+    let fileId = req.body.fileId; // This is the file id from the client
 
     let user = 'Anon';
 
