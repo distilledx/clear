@@ -1,6 +1,6 @@
 # Clear
 
-A very much in progress file upload website
+A very much in progress (not in development) file upload website
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
